@@ -1,4 +1,4 @@
 export const env = {
-    baseServerURL: 'http://localhost:3001',
+    baseServerURL: 'https://factureapp-production.up.railway.app',
     tokenStorageName: '_auth__facture_app'
 }
