@@ -3,8 +3,11 @@ import { useQuery} from "react-query"
 import { Route, Routes } from "react-router-dom"
 import { getAuth } from "../services/authservice"
 import { Navbar } from "./atomes/Navbar"
+import Clients from "./Clients"
+import Produits from "./Produits"
 import { Profil } from "./Profil"
 import Users from "./Users"
+import Ventes from "./Ventes"
 
 const Dashboard = () => {
 
@@ -23,6 +26,9 @@ const Dashboard = () => {
      <Route path="" element={<Profil auth={data} />} />
      <Route path="profil" element={<Profil auth={data}/>} />
      <Route path="users" element={<Users auth={data}/>} />
+     <Route path="ventes" element={<Ventes auth={data}/>} />
+     <Route path="clients" element={<Clients auth={data}/>} />
+     <Route path="produits" element={<Produits auth={data}/>} />
      </Routes>
     </div>
   )
