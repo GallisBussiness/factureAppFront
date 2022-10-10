@@ -33,7 +33,7 @@ function Produits({auth}) {
         setGlobalFilterValue(value);
     }
 
-    const qk = ['get_Produits',auth?._id]
+    const qk = ['get_Produits']
 
     const {data: Produits, isLoading } = useQuery(qk, () => getProduits());
 

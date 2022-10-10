@@ -9,11 +9,14 @@ import { Dropdown } from 'primereact/dropdown';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { getClients } from '../../services/clientservice';
+import AddVentes from '../AddVentes';
 
 const schema = yup.object({
     date: yup.string()
     .required(),
     client: yup.string()
+    .required(),
+    ventes: yup.array()
     .required(),
   }).required();
 
@@ -29,8 +32,8 @@ function CreateventeModal({ isOpen, onResolve, onReject }) {
         } 
     });
 
-    const defaultValues = {date: new Date().toISOString()};
-    const {control, handleSubmit, formState: { errors } } = useForm({
+    const defaultValues = {date: new Date().toISOString(), client: '', ventes: []};
+    const {control, handleSubmit, setValue, getValues, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
       defaultValues
     });
@@ -61,6 +64,7 @@ function CreateventeModal({ isOpen, onResolve, onReject }) {
               )} />
               {getFormErrorMessage('client')} 
             </div>
+            <AddVentes ventes={getValues().ventes} setVente={setValue} />
             <button  type="submit" className="inline-block px-6 py-3 font-bold text-center
              text-white uppercase align-middle transition-all rounded-lg cursor-pointer
               bg-gradient-to-tl from-blue-700 to-blue-300 leading-pro text-xs ease-soft-in
