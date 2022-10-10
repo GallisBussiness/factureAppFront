@@ -15,7 +15,7 @@ import './datatable.css'
 import { createClient, getClients, updateClient } from '../services/clientservice'
 
 
-function Clients({auth}) {
+function Clients() {
     const [selectedClients, setSelectedClients] = useState(null);
     const qc = useQueryClient()
     const toast = useRef();
@@ -35,7 +35,7 @@ function Clients({auth}) {
         setGlobalFilterValue(value);
     }
 
-    const qk = ['get_Clients',auth?._id]
+    const qk = ['get_Clients']
 
     const {data: Clients, isLoading } = useQuery(qk, () => getClients());
 
@@ -119,7 +119,7 @@ function Clients({auth}) {
     </div>
   </div>
 </div>
-<div className="datatable-doc mt-4">
+<div className="datatable-doc mt-4 w-4/5 mx-auto">
             <div className="card">
             <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
                 <DataTable value={Clients} paginator className="p-datatable-customers" header={header} rows={10}
@@ -127,7 +127,7 @@ function Clients({auth}) {
                     dataKey="_id" rowHover selection={selectedClients} onSelectionChange={e => setSelectedClients(e.value)}
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"
                     globalFilterFields={['nom', 'prenom']} emptyMessage="Aucun Client trouvé"
-                    currentPageReportTemplate="Voir {first} de {last} à {totalRecords} clients">
+                    currentPageReportTemplate="Voir {first} de {last} à {totalRecords} clients" size="small">
                     <Column selectionMode="multiple" headerStyle={{ width: '3em' }}></Column>
                     <Column field="prenom" header="Prenom" sortable style={{ minWidth: '14rem' }} />
                     <Column field="nom" header="Nom" sortable style={{ minWidth: '14rem' }} />

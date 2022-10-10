@@ -138,7 +138,7 @@ const Users = ({auth}) => {
     </div>
   </div>
 </div>
-<div className="datatable-doc mt-4">
+<div className="datatable-doc mt-4 w-4/5 mx-auto">
             <div className="card">
             <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
                 <DataTable value={users} paginator className="p-datatable-customers" header={header} rows={10}
@@ -146,7 +146,7 @@ const Users = ({auth}) => {
                     dataKey="_id" rowHover selection={selectedUsers} onSelectionChange={e => setSelectedUsers(e.value)}
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"
                     globalFilterFields={['nom', 'prenom']} emptyMessage="Aucun Utilisateur trouvé"
-                    currentPageReportTemplate="Voir {first} de {last} à {totalRecords} utilisateurs">
+                    currentPageReportTemplate="Voir {first} de {last} à {totalRecords} utilisateurs" size="small">
                     <Column selectionMode="multiple" headerStyle={{ width: '3em' }}></Column>
                     <Column field="prenom" header="Prenom" sortable style={{ minWidth: '14rem' }} />
                     <Column field="nom" header="Nom" sortable style={{ minWidth: '14rem' }} />

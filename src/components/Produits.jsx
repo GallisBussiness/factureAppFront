@@ -117,7 +117,7 @@ function Produits({auth}) {
     </div>
   </div>
 </div>
-<div className="datatable-doc mt-4">
+<div className="datatable-doc mt-4 w-4/5 mx-auto">
             <div className="card">
             <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
                 <DataTable value={Produits} paginator className="p-datatable-customers" header={header} rows={10}
@@ -125,7 +125,7 @@ function Produits({auth}) {
                     dataKey="_id" rowHover selection={selectedProduits} onSelectionChange={e => setSelectedProduits(e.value)}
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"
                     globalFilterFields={['nom', 'pv']} emptyMessage="Aucun Produit trouvé"
-                    currentPageReportTemplate="Voir {first} de {last} à {totalRecords} Produits">
+                    currentPageReportTemplate="Voir {first} de {last} à {totalRecords} Produits" size="small">
                     <Column selectionMode="multiple" headerStyle={{ width: '3em' }}></Column>
                     <Column field="nom" header="Nom" sortable style={{ minWidth: '14rem' }} />
                     <Column field="pa" header="Prix d'achat" sortable style={{ minWidth: '14rem' }} />

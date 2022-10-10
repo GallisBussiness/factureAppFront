@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom"
 import { getAuth } from "../services/authservice"
 import { Navbar } from "./atomes/Navbar"
 import Clients from "./Clients"
+import GlobalLoadingIndicator from "./GlobalIsFetchingInd"
 import Produits from "./Produits"
 import { Profil } from "./Profil"
 import Users from "./Users"
@@ -21,6 +22,7 @@ const Dashboard = () => {
 
   return (
     <div className="overflow-x-hidden">
+      <GlobalLoadingIndicator />
     <Navbar />
      <Routes>
      <Route path="" element={<Profil auth={data} />} />
