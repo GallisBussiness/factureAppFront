@@ -5,16 +5,16 @@ import { Controller, useForm } from 'react-hook-form';
 import { create } from 'react-modal-promise'
 import { Calendar } from 'primereact/calendar';
 import { parseISO } from 'date-fns';
-import { Dropdown } from 'primereact/dropdown';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { getClients } from '../../services/clientservice';
 import AddVentes from '../AddVentes';
+import Select from 'react-select'
 
 const schema = yup.object({
     date: yup.string()
     .required(),
-    client: yup.string()
+    client: yup.object()
     .required(),
     ventes: yup.array()
     .required(),
@@ -27,7 +27,7 @@ function CreateventeModal({ isOpen, onResolve, onReject }) {
 
     useQuery(qkc, () => getClients(), {
         onSuccess: (_) => {
-            const newcl = _.map(c => ({...c,full: `${c.prenom} - ${c.nom} - ${c.tel}`}));
+            const newcl = _.map(c => ({value:c,label: `${c.prenom} - ${c.nom} - ${c.tel}`}));
             setClients(newcl);
         } 
     });
@@ -43,12 +43,16 @@ function CreateventeModal({ isOpen, onResolve, onReject }) {
   };
 
   const onCreate = data => {
-      onResolve(data);
+       const {client,ventes} = data;
+       const total = ventes.reduce((acc,cur) => acc + (+cur.qte * (+cur.produit.value.pv)),0);
+       const venteDto = ventes.map(v => ({qte: v.qte, produit: v.produit.value._id}));
+      onResolve({...data,client: client.value._id,total, ventes: venteDto});
     };
 
   return (
     <>
         <Dialog header="Creer un Facture" visible={isOpen} onHide={() => onReject(false)} className="w-1/2">
+        <AddVentes ventes={getValues().ventes} setVente={setValue} />
     <form  className="mb-3" onSubmit={handleSubmit(onCreate)} method="POST">
     <div className="mb-3 flex flex-col space-y-2">
             <label htmlFor="date" className="form-label">Date De la Facture </label>
@@ -59,12 +63,14 @@ function CreateventeModal({ isOpen, onResolve, onReject }) {
             </div>
             <div className="mb-3 flex flex-col justify-center">
             <label htmlFor="client" className="form-label">Client</label>
-              <Controller control={control} name="client" render={({field}) => (
-                  <Dropdown className="w-full" optionLabel="full" optionValue="_id" value={field.value} options={clients} onChange={(e) => field.onChange(e.value)} placeholder="Selectionnez le client"/>
-              )} />
+            <Controller control={control} name="client" render={({field}) => (
+                    <Select
+                    {...field}
+                    options={clients}
+                  />
+            )} />
               {getFormErrorMessage('client')} 
             </div>
-            <AddVentes ventes={getValues().ventes} setVente={setValue} />
             <button  type="submit" className="inline-block px-6 py-3 font-bold text-center
              text-white uppercase align-middle transition-all rounded-lg cursor-pointer
               bg-gradient-to-tl from-blue-700 to-blue-300 leading-pro text-xs ease-soft-in

@@ -8,17 +8,21 @@ import { AiOutlinePlus } from 'react-icons/ai'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import ModalContainer from 'react-modal-promise'
 import { InputText } from 'primereact/inputtext'
-import { BsFillPenFill } from 'react-icons/bs'
+import { BsEye, BsFillPenFill } from 'react-icons/bs'
 import CreateVenteModal from './modals/CreateVenteModal'
 import UpdateVenteModal from './modals/UpdateVenteModal'
 import './datatable.css'
 import { createVente, getVentes, updateVente } from '../services/venteservice'
+import { format, parseISO } from 'date-fns'
+import fr from 'date-fns/locale/fr'
+import { useNavigate } from 'react-router-dom'
 
 function Ventes({auth}) {
 
   const [selectedVentes, setSelectedVentes] = useState(null);
   const qc = useQueryClient()
   const toast = useRef();
+  const navigate = useNavigate()
   const [filters, setFilters] = useState({
       'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
@@ -41,6 +45,7 @@ function Ventes({auth}) {
       onSuccess: (_) => {
       toast.current.show({severity: 'success', summary: 'Creation Facture', detail: 'Création réussie !!'});
        qc.invalidateQueries(qk);
+       navigate(`/dashboard/ventes/${_._id}`)
       },
       onError: (_) => {
           toast.current.show({severity: 'error', summary: 'Create facture', detail: 'Creation échouée !!'});
@@ -51,6 +56,7 @@ function Ventes({auth}) {
       onSuccess: (_) => {
           toast.current.show({severity: 'success', summary: 'Mise à jour Facture', detail: 'Mis à jour réussie !!'});
           qc.invalidateQueries(qk);
+          
          },
          onError: (_) => {
           toast.current.show({severity: 'error', summary: 'Mis à jour Facture', detail: 'Mis à jour échouée !!'});
@@ -73,6 +79,7 @@ function Ventes({auth}) {
       }));
   }
 
+  const handleViewVente = (row) => navigate(`/dashboard/ventes/${row._id}`);
   const handleCreateVente = () => {
       CreateVenteModal().then(create);
   }
@@ -89,8 +96,21 @@ function Ventes({auth}) {
       )
   }
 
+  const formatDate = (value) => {
+    return format(parseISO(value),'dd MMMM yyyy', {
+        locale: fr,
+    });
+}
+
+const dateBodyTemplate = (rowData) => {
+    return formatDate(rowData.date);
+}
+
+  const clientTemplate = (row) => `${row.client.prenom} ${row.client.nom}`;
+
   const actionBodyTemplate = (rowData) => {
       return <div className="flex items-center justify-center space-x-1">
+    <button type="button" onClick={() => handleViewVente(rowData)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-700 to-blue-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><BsEye className="text-white inline"/></button>
       <button type="button" onClick={() => handleUpdateVente(rowData)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-700 to-blue-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><BsFillPenFill className="text-white inline"/></button>
       </div>;
       
@@ -127,8 +147,8 @@ function Ventes({auth}) {
                     globalFilterFields={['nom', 'pv']} emptyMessage="Aucune Facture trouvée"
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} Factures" size="small">
                     <Column selectionMode="multiple" headerStyle={{ width: '3em' }}></Column>
-                    <Column field="date" header="Date" sortable style={{ minWidth: '14rem' }} />
-                    <Column field="client.nom" header="Client" sortable style={{ minWidth: '14rem' }} />
+                    <Column field="date" header="Date" body={dateBodyTemplate} sortable style={{ minWidth: '14rem' }} />
+                    <Column field="client.nom" header="Client" body={clientTemplate} sortable style={{ minWidth: '14rem' }} />
                     <Column field="total" header="Total" sortable  style={{ minWidth: '8rem' }}/>
                     <Column headerStyle={{ width: '4rem', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} body={actionBodyTemplate} />
                 </DataTable>
