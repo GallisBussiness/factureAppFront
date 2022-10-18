@@ -77,7 +77,7 @@ const Login = () => {
             
               <div className="p-6 pb-0 mb-0 bg-transparent border-b-0 rounded-t-2xl">
                 <div className="flex flex-col items-center justify-center">
-                <img src="/img/logo.png" alt="logo" className="h-60 w-60" />
+                <img src="/img/logo.png" alt="logo" className="h-60 w-96 object-cover" />
                 <p className="mb-0 text-lg font-semibold">FACTURE APP</p>
                 </div>
               </div>
