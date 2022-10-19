@@ -3,19 +3,17 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { create } from 'react-modal-promise'
-import { InputNumber } from 'primereact/inputnumber';
 
 const schema = yup.object({
     nom: yup.string()
     .required(),
-    pa: yup.string()
+    unites: yup.array()
     .required(),
-   pv: yup.string().required(),
   }).required();
 
 function CreateProduitModal({ isOpen, onResolve, onReject }) {
 
-    const defaultValues = {nom: '', pa: '', pv: ''};
+    const defaultValues = {nom: '', unites: []};
     const {control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
       defaultValues
@@ -26,8 +24,8 @@ function CreateProduitModal({ isOpen, onResolve, onReject }) {
   };
 
   const onCreate = data => {
-    const {pa,pv} = data;
-      onResolve({...data, pa: +pa, pv: +pv});
+    const {unites} = data;
+      onResolve({...data, unites});
     };
 
 
@@ -45,20 +43,7 @@ function CreateProduitModal({ isOpen, onResolve, onReject }) {
              )}/>
               {getFormErrorMessage('nom')} 
             </div>
-            <div className="mb-3 flex flex-col space-y-2">
-            <label htmlFor="pa" className="form-label">Prix d'achat</label>
-            <Controller control={control} name="pa" render={({field}) => (
-            <InputNumber inputId="pa" value={field.value} onValueChange={(e) => field.onChange(e.value)} />
-             )}/>
-              {getFormErrorMessage('pa')} 
-            </div>
-            <div className="mb-3 flex flex-col space-y-2">
-            <label htmlFor="pv" className="form-label">Prix de vente</label>
-            <Controller control={control} name="pv" render={({field}) => (
-            <InputNumber inputId="pv" value={field.value} onValueChange={(e) => field.onChange(e.value)} />
-             )}/>
-              {getFormErrorMessage('pv')} 
-            </div>
+            
             <button  type="submit" className="inline-block px-6 py-3 font-bold text-center
              text-white uppercase align-middle transition-all rounded-lg cursor-pointer
               bg-gradient-to-tl from-blue-700 to-blue-300 leading-pro text-xs ease-soft-in

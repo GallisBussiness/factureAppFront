@@ -128,8 +128,6 @@ function Produits({auth}) {
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} Produits" size="small">
                     <Column selectionMode="multiple" headerStyle={{ width: '3em' }}></Column>
                     <Column field="nom" header="Nom" sortable style={{ minWidth: '14rem' }} />
-                    <Column field="pa" header="Prix d'achat" sortable style={{ minWidth: '14rem' }} />
-                    <Column field="pv" header="Prix de vente" sortable  style={{ minWidth: '8rem' }}/>
                     <Column headerStyle={{ width: '4rem', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} body={actionBodyTemplate} />
                 </DataTable>
             </div>

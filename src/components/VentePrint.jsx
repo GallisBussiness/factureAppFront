@@ -12,7 +12,7 @@ export const VentePrint = forwardRef(({vente},ref) => {
     }
 
  return (
- <div ref={ref}>
+ <div ref={ref} className="w-2/6 mx-auto">
          <section className="py-20 bg-gray-200">
   <div className="max-w-5xl mx-auto py-16 bg-white">
     <article className="overflow-hidden">

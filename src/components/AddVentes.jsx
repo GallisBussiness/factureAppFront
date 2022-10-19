@@ -22,7 +22,7 @@ function AddVentes({ventes,setVente}) {
     const defaultValues = {
         qte: 1,
         produit: ''};
-const {control, handleSubmit, formState: { errors } } = useForm({
+const {control, handleSubmit,setFocus, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
   defaultValues
 });
@@ -50,12 +50,14 @@ const actionBodyTemplate = (rowData) => {
 
   const deleteVente = (row) => {
     const rest = curVentes.filter(v => v.produit.value.nom !== row.produit.value.nom )
-    setCurVentes(rest)
+    setCurVentes(rest);
+    setFocus('produit');
   }
 
   const addProduct = data => {
     setCurVentes(cur => ([...cur,data]))
     setVente('ventes', [...curVentes,data]);
+    setFocus('produit');
   };
 
   const totalTemplate = (rowData) => {
@@ -72,6 +74,7 @@ const actionBodyTemplate = (rowData) => {
                     <Select
                     {...field}
                     options={produits}
+                    autoFocus
                   />
               )} />
               {getFormErrorMessage('produit')} 
