@@ -26,7 +26,7 @@ const Dashboard = () => {
       <GlobalLoadingIndicator />
     <Navbar />
      <Routes>
-     <Route path="" element={<Profil auth={data} />} />
+     <Route path="" element={<Ventes auth={data} />} />
      <Route path="profil" element={<Profil auth={data}/>} />
      <Route path="users" element={<Users auth={data}/>} />
      <Route path="ventes" element={<Ventes auth={data}/>} />
