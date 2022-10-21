@@ -19,7 +19,7 @@ export const VentePrint = forwardRef(({vente},ref) => {
       <div className="bg-[white] rounded-b-md">
         <div className="p-2">
           <div className="flex items-center space-x-4">
-           <div className="flex flex-col items-center justify-center space-y-1 border border-black w-3/5 rounded-md p-2 text-justify">
+           <div className="flex flex-col items-center justify-center space-y-1 border border-black w-2/5 rounded-md p-2 text-justify">
                 <h2 className="font-bold text-sm"> SOCK ET FRERE</h2>
                 <h2 className="font-bold text-sm"> COMMERCANT IMPORT-EXPORT</h2>
                 <h2 className="font-bold text-sm"> vente produit cosmétique et maquillage</h2>
@@ -40,11 +40,11 @@ export const VentePrint = forwardRef(({vente},ref) => {
           </div>
         </div>
        <div className="p-5">
-       <div className="text-sm font-bold text-slate-500">
+       <div className="text-sm font-bold">
                 <p className="text-lg font-bold black uppercase">Client :</p>
-                <p>PRENOM : {vente?.client?.prenom}</p>
-                <p>NOM: {vente?.client?.nom}</p>
-                <p>TEL: {vente?.client?.tel}</p>
+                <p className="font-semibold">PRENOM : {vente?.client?.prenom}</p>
+                <p  className="font-semibold">NOM: {vente?.client?.nom}</p>
+                <p  className="font-semibold">TEL: {vente?.client?.tel}</p>
               </div>
        </div>
         <div className="p-5">
@@ -52,14 +52,17 @@ export const VentePrint = forwardRef(({vente},ref) => {
             <table className="min-w-full divide-y divide-slate-500">
               <thead>
                 <tr>
-                  <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-bold text-slate-700 sm:pl-6 md:pl-0">
+                  <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-bold sm:pl-6 md:pl-0">
                     Description
                   </th>
-                  <th scope="col" className="hidden py-3.5 px-3 text-right text-sm font-bold text-slate-700 sm:table-cell">
+                  <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-bold sm:pl-6 md:pl-0">
+                    Unite
+                  </th>
+                  <th scope="col" className="hidden py-3.5 px-3 text-right text-sm font-bold sm:table-cell">
                     Quantité
                   </th>
       
-                  <th scope="col" className="py-3.5 pl-3 pr-4 text-right text-sm font-bold text-slate-700 sm:pr-6 md:pr-0">
+                  <th scope="col" className="py-3.5 pl-3 pr-4 text-right text-sm font-bold  sm:pr-6 md:pr-0">
                     Montant
                   </th>
                 </tr>
@@ -70,7 +73,10 @@ export const VentePrint = forwardRef(({vente},ref) => {
                   <td className="py-4 pl-4 pr-3 text-sm sm:pl-6 md:pl-0">
                     <div className="font-bold text-slate-700">{v.produit.nom}</div>
                   </td>
-                  <td className="hidden px-3 py-4 text-sm font-bold text-right text-slate-500 sm:table-cell">
+                  <td className="px-3 py-4 text-sm font-bold sm:table-cell">
+                    {v.produit.unite.nom}
+                  </td>
+                  <td className=" px-3 py-4 text-sm font-bold text-right  sm:table-cell">
                     {v.qte}
                   </td>
                   <td className="py-4 pl-3 pr-4 font-bold text-sm text-right text-slate-500 sm:pr-6 md:pr-0">

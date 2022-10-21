@@ -4,17 +4,34 @@ import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { create } from 'react-modal-promise'
 import { InputNumber } from 'primereact/inputnumber';
+import Select from 'react-select'
+import { useQuery } from 'react-query';
+import { getUnites } from '../../services/uniteservice';
+import { useState } from 'react';
 
 const schema = yup.object({
     nom: yup.string()
     .required(),
-    pa: yup.string()
+    unite: yup.object()
+    .required(),
+     pa: yup.string()
     .required(),
    pv: yup.string().required(),
   }).required();
 
 
 function UpdateProduitModal({ isOpen, onResolve, onReject,produit }) {
+
+  const [Unites,setUnites] = useState([])
+  const qkc = ['get_Unites']
+
+  useQuery(qkc, () => getUnites(), {
+      onSuccess: (_) => {
+          const newcl = _.map(c => ({value:c,label: c.nom}));
+          setUnites(newcl);
+      } 
+  });
+
     const defaultValues = {nom: produit?.nom, pa: produit?.pa,pv: produit?.pv};
     const {control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
@@ -26,8 +43,8 @@ function UpdateProduitModal({ isOpen, onResolve, onReject,produit }) {
   };
 
   const onCreate = data => {
-    const {pa,pv} = data;
-    onResolve({_id:produit?._id,...data, pa: +pa, pv: +pv});
+    const {unite,pa,pv} = data;
+    onResolve({_id:produit?._id,...data,unite: unite.value._id, pa: +pa, pv: +pv});
     };
 
   return (
@@ -40,6 +57,16 @@ function UpdateProduitModal({ isOpen, onResolve, onReject,produit }) {
             <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-blue-300 bg-white bg-clip-padding px-3 py-2 font-normal text-blue-700 outline-none transition-all placeholder:text-blue-500 focus:border-blue-300 focus:outline-none" id="nom" placeholder="Entrer le nom" autoFocus />
              )}/>
               {getFormErrorMessage('nom')} 
+            </div>
+            <div className="mb-3 flex flex-col justify-center">
+            <label htmlFor="unite" className="form-label">Unite</label>
+            <Controller control={control} name="unite" render={({field}) => (
+                    <Select
+                    {...field}
+                    options={Unites}
+                  />
+            )} />
+              {getFormErrorMessage('unite')} 
             </div>
             <div className="mb-3 flex flex-col space-y-2">
             <label htmlFor="pa" className="form-label">Prix d'achat</label>

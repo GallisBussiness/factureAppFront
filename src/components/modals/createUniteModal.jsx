@@ -3,34 +3,16 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { create } from 'react-modal-promise'
-import Select from 'react-select'
-import { useQuery } from 'react-query';
-import { getUnites } from '../../services/uniteservice';
-import { InputNumber } from 'primereact/inputnumber';
-import { useState } from 'react';
 
 const schema = yup.object({
     nom: yup.string()
     .required(),
-    unite: yup.object()
-    .required(),
-    pa: yup.number(),
-    pv: yup.number().required()
   }).required();
 
-function CreateProduitModal({ isOpen, onResolve, onReject }) {
 
-  const [Unites,setUnites] = useState([])
-  const qkc = ['get_Unites']
+function CreateUniteModal({ isOpen, onResolve, onReject }) {
 
-  useQuery(qkc, () => getUnites(), {
-      onSuccess: (_) => {
-          const newcl = _.map(c => ({value:c,label: c.nom}));
-          setUnites(newcl);
-      } 
-  });
-
-    const defaultValues = {nom: '', unite: {}, pa: 0, pv: 0};
+    const defaultValues = {nom: ''};
     const {control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
       defaultValues
@@ -41,17 +23,15 @@ function CreateProduitModal({ isOpen, onResolve, onReject }) {
   };
 
   const onCreate = data => {
-    const {unite,pa,pv} = data;
-      onResolve({...data, unite: unite.value._id,pa: +pa, pv: +pv});
+      onResolve(data);
     };
-
 
   return (
     <>
-      <Dialog header="Creer un produit" visible={isOpen} onHide={() => onReject(false)} className="w-1/2">
+      <Dialog header="Creer une Unité" visible={isOpen} onHide={() => onReject(false)} className="w-1/2">
     <form  className="mb-3" onSubmit={handleSubmit(onCreate)} method="POST">
     <div className="mb-3 flex flex-col space-y-2">
-            <label htmlFor="nom" className="form-label">Nom du produit</label>
+            <label htmlFor="nom" className="form-label">Nom de l'unité</label>
             <Controller control={control} name="nom" render={({field}) => (
             <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 
             ease-soft block w-full appearance-none rounded-lg border border-solid border-blue-300
@@ -60,31 +40,7 @@ function CreateProduitModal({ isOpen, onResolve, onReject }) {
              )}/>
               {getFormErrorMessage('nom')} 
             </div>
-            <div className="mb-3 flex flex-col justify-center">
-            <label htmlFor="unite" className="form-label">Unite</label>
-            <Controller control={control} name="unite" render={({field}) => (
-                    <Select
-                    {...field}
-                    options={Unites}
-                  />
-            )} />
-              {getFormErrorMessage('unite')} 
-            </div>
-            <div className="mb-3 flex flex-col space-y-2">
-            <label htmlFor="pa" className="form-label">Prix d'achat</label>
-            <Controller control={control} name="pa" render={({field}) => (
-            <InputNumber inputId="pa" value={field.value} onValueChange={(e) => field.onChange(e.value)} />
-             )}/>
-              {getFormErrorMessage('pa')} 
-            </div>
             
-            <div className="mb-3 flex flex-col space-y-2">
-            <label htmlFor="pv" className="form-label">Prix de vente</label>
-            <Controller control={control} name="pv" render={({field}) => (
-            <InputNumber inputId="pv" value={field.value} onValueChange={(e) => field.onChange(e.value)} />
-             )}/>
-              {getFormErrorMessage('pv')} 
-            </div>
             <button  type="submit" className="inline-block px-6 py-3 font-bold text-center
              text-white uppercase align-middle transition-all rounded-lg cursor-pointer
               bg-gradient-to-tl from-blue-700 to-blue-300 leading-pro text-xs ease-soft-in
@@ -100,4 +56,4 @@ function CreateProduitModal({ isOpen, onResolve, onReject }) {
   )
 }
 
-export default create(CreateProduitModal)
+export default create(CreateUniteModal);

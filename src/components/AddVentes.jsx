@@ -32,7 +32,7 @@ const qkp = ['get_Produits']
 
      useQuery(qkp, () => getProduits(), {
       onSuccess: (_) => {
-        const newv = _.map(c => ({value:c,label: `${c?.nom} - ${c?.pv}`}));
+        const newv = _.map(c => ({value:c,label: `${c?.unite?.nom} - ${c?.nom} - ${c?.pv}`}));
         setProduits(newv);
     } 
     });
