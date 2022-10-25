@@ -32,7 +32,15 @@ addLocale('fr', {
 
 locale('fr');
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient(
+  {
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+    },
+  }
+);
 
 function App() {
   return (
