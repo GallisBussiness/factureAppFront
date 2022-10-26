@@ -4,12 +4,12 @@ import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { create } from 'react-modal-promise'
 import { Calendar } from 'primereact/calendar';
-import { parseISO } from 'date-fns';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { getClients } from '../../services/clientservice';
 import AddVentes from '../AddVentes';
 import Select from 'react-select'
+import { formatISO } from 'date-fns';
 
 const schema = yup.object({
     date: yup.string()
@@ -32,7 +32,7 @@ function CreateventeModal({ isOpen, onResolve, onReject }) {
         } 
     });
 
-    const defaultValues = {date: new Date().toISOString(), client: '', ventes: []};
+    const defaultValues = {date: formatISO(new Date(),{ representation: 'date' }), client: '', ventes: []};
     const {control, handleSubmit, setValue, getValues, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
       defaultValues
@@ -57,7 +57,7 @@ function CreateventeModal({ isOpen, onResolve, onReject }) {
     <div className="mb-3 flex flex-col space-y-2">
             <label htmlFor="date" className="form-label">Date De la Facture </label>
             <Controller control={control} name="date" render={({field}) => (
-            <Calendar id="date" value={parseISO(field.value)} onChange={(e) => field.onChange(e.value.toISOString())} showTime showSeconds dateFormat="dd/mm/yyyy"  placeholder="Date De La Facture"/>
+            <Calendar id="date" value={field.value} onChange={(e) => field.onChange(formatISO(e.value,{ representation: 'date' }))} dateFormat="dd/mm/yy"  placeholder="Date De La Facture"/>
              )}/>
               {getFormErrorMessage('date')} 
             </div>

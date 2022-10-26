@@ -36,7 +36,6 @@ function Produits({auth}) {
     const qk = ['get_Produits']
 
     const {data: Produits, isLoading } = useQuery(qk, () => getProduits());
-    console.log(Produits)
 
     const {mutate: create} = useMutation((data) => createProduit(data), {
         onSuccess: (_) => {

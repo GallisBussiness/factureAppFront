@@ -13,8 +13,6 @@ import CreateVenteModal from './modals/CreateVenteModal'
 import UpdateVenteModal from './modals/UpdateVenteModal'
 import './datatable.css'
 import { createVente, getVentes, updateVente } from '../services/venteservice'
-import { format, parseISO } from 'date-fns'
-import fr from 'date-fns/locale/fr'
 import { useNavigate } from 'react-router-dom'
 
 function Ventes({auth}) {
@@ -96,11 +94,11 @@ function Ventes({auth}) {
       )
   }
 
-  const formatDate = (value) => {
-    return format(parseISO(value),'dd MMMM yyyy', {
-        locale: fr,
-    });
-}
+  
+  const formatDate = (v) => {
+    const parts = v.split('-');
+    return parts.reverse().join('-')
+  }
 
 const dateBodyTemplate = (rowData) => {
     return formatDate(rowData.date);
