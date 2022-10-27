@@ -9,32 +9,32 @@ const formatDate = (v) => {
 }
  return (
  <div ref={ref} className="w-10/12 mx-auto font-print">
-         <section className="py-2 bg-white">
+         <section className="py-1 bg-white">
   <div className="max-w-5xl mx-auto bg-white">
     <article className="overflow-hidden">
       <div className="bg-[white] rounded-b-md">
         <div className="p-1">
           <div className="flex items-center space-x-10">
-           <div className="flex flex-col items-center justify-center space-y-1 border border-black w-2/6 print:w-4/6 rounded-md p-2">
-                <h2 className="font-bold text-sm"> SOCK ET FRERE</h2>
-                <h2 className="font-bold text-sm"> COMMERCANT IMPORT-EXPORT</h2>
-                <h2 className="font-bold text-sm"> vente produit cosmétique et maquillage</h2>
-                <h2 className="font-bold text-sm"> marche boucott ziguinchor cantine 40 </h2>
-                <h2 className="font-bold text-sm"> TEL 77 897 24 93 / 77 766 22 80</h2>
+           <div className="flex flex-col items-center justify-center space-y-1 border border-black w-2/6 print:w-3/6 rounded-md p-2">
+                <h2 className="font-bold text-sm text-black"> SOCK ET FRERE</h2>
+                <h2 className="font-bold text-xs text-black"> COMMERCANT IMPORT-EXPORT</h2>
+                <h2 className="font-bold text-xs text-black"> vente produit cosmétique et maquillage</h2>
+                <h2 className="font-bold text-xs text-black"> marche boucott ziguinchor cantine 40 </h2>
+                <h2 className="font-bold text-xs text-black"> TEL 77 897 24 93 / 77 766 22 80</h2>
            </div>
            <div className="p-2 w-2/6">
           <div className="flex flex-col w-full">
             <div>
-              <div className="text-sm font-bold text-black">
+              <div className="text-xs font-bold text-black">
                 {vente?.date && <p>Le : {formatDate(vente.date)}</p>}
               </div>
             </div>
-            <div className="">
-          <div className="text-sm">
-                <p className="text-sm font-semibold uppercase">Client :</p>
-                <p>PRENOM : {vente?.client?.prenom}</p>
-                <p>NOM: {vente?.client?.nom}</p>
-                <p>TEL: {vente?.client?.tel}</p>
+            <div className="text-black">
+          <div className="text-xs">
+                <p className="text-xs font-semibold uppercase">Client :</p>
+                <p className="text-black">PRENOM : {vente?.client?.prenom}</p>
+                <p className="text-black">NOM: {vente?.client?.nom}</p>
+                <p className="text-black">TEL: {vente?.client?.tel}</p>
               </div>
        </div>
           </div>
@@ -43,23 +43,23 @@ const formatDate = (v) => {
         </div>
        
         <div className="p-1">
-          <div className="flex flex-col mx-0 mt-8">
-            <table className="min-w-full border border-separate border-spacing-0">
+          <div className="flex flex-col mx-0">
+            <table className="border border-separate border-spacing-0">
               <thead>
                 <tr> 
-                <th scope="col" className="py-1 px-3 text-center text-sm font-bold sm:table-cell border border-slate-600">
-                    Quantité
+                <th scope="col" className="py-1 text-center text-xs font-bold sm:table-cell border border-slate-600">
+                    Qté
                   </th>
-                  <th scope="col" className="py-1 pl-4 pr-3 text-center text-sm font-bold sm:pl-6 md:pl-0 border border-slate-600">
+                  <th scope="col" className="py-1 text-center text-xs font-bold  border border-slate-600">
                     Unite
                   </th>
-                  <th scope="col" className="py-1 pl-4 pr-3 text-center text-sm font-bold sm:pl-6 md:pl-0 border border-slate-600">
+                  <th scope="col" className="py-1  text-center text-xs font-bold border border-slate-600">
                     Désignation
                   </th>
-                  <th scope="col" className="py-1 pl-4 pr-3 text-center text-sm font-bold sm:pl-6 md:pl-0 border border-slate-600">
-                    Prix Unitaire
+                  <th scope="col" className="py-1 text-center text-xs font-bold  border border-slate-600">
+                    PU
                   </th>
-                  <th scope="col" className="py-1 pl-3 pr-4 text-center text-sm font-bold  sm:pr-6 md:pr-2 border border-slate-600">
+                  <th scope="col" className="py-1 text-center text-xs font-bold  border border-slate-600">
                     Montant
                   </th>
                 </tr>
@@ -67,20 +67,20 @@ const formatDate = (v) => {
               <tbody>
                 {vente?.ventes?.map((v,i)=> (
                   <tr key={i} className="border-b border-slate-200">
-                    <td className=" px-1 py-1 text-sm text-center font-bold sm:table-cell border-l border-r border-slate-600 uppercase underline">
+                    <td className="text-xs text-center font-bold sm:table-cell border-l border-r border-slate-600 uppercase underline">
                     {v.qte}
                   </td>
-                  <td className="px-1 text-sm text-center font-bold sm:table-cell border-l border-r border-slate-600 uppercase underline">
+                  <td className="text-xs text-center font-bold sm:table-cell border-l border-r border-slate-600 uppercase underline">
                     {v.produit.unite.nom}
                   </td>
-                  <td className="py-1 pl-4 pr-3 text-sm sm:pl-6 text-center md:pl-0 border-l border-r border-slate-600 uppercase">
-                    <div className="font-bold text-slate-700">{v.produit.nom}</div>
+                  <td className="text-xs text-center border-l border-slate-600 uppercase w-96">
+                    <div className="font-bold">{v.produit.nom}</div>
                   </td>
-                  <td className=" pl-4 pr-3 text-sm sm:pl-6 text-center md:pl-0 border-l border-r border-slate-600">
-                    <div className="font-bold text-slate-700">{v.produit.pv} FCFA</div>
+                  <td className="text-xs text-center border-l border-r border-slate-600">
+                    <div className="font-bold">{v.produit.pv}</div>
                   </td>
-                  <td className="pl-4 pr-3 font-bold text-sm text-center sm:pr-6 md:pr-2 border-l border-r border-slate-600">
-                    {v.produit.pv * v.qte} FCFA
+                  <td className="font-bold text-xs text-center border-l border-r border-slate-600">
+                    {v.produit.pv * v.qte}
                   </td>
                 </tr> 
                 ))}
@@ -89,11 +89,11 @@ const formatDate = (v) => {
               <tfoot>
               
                 <tr>
-                  <th scope="row" colSpan={3} className="pt-2 pl-6 pr-3 text-sm font-bold text-right text-slate-700 sm:table-cell md:pl-0 border border-slate-600 underline">
+                  <th scope="row" colSpan={3} className="text-sm font-bold text-right  sm:table-cell border border-slate-600 underline px-2">
                     NET A PAYER
                   </th>
-                  <th scope="row" colSpan={2} className="pt-2 pl-3 pr-4 text-lg font-bold text-center text-slate-700 sm:pr-6 md:pr-2  border border-slate-600 italic">
-                    {vente?.total} FCFA
+                  <th scope="row" colSpan={2} className="text-sm font-bold text-center border border-slate-600 italic">
+                    {vente?.total}
                   </th>
                 </tr>
               </tfoot>
