@@ -5,12 +5,14 @@ import { Toast } from 'primereact/toast'
 import { Toolbar } from 'primereact/toolbar'
 import { useRef, useState } from 'react'
 import { AiOutlinePlus } from 'react-icons/ai'
+import { GiMoneyStack } from 'react-icons/gi'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import ModalContainer from 'react-modal-promise'
 import { InputText } from 'primereact/inputtext'
 import { BsEye, BsFillPenFill } from 'react-icons/bs'
 import CreateVenteModal from './modals/CreateVenteModal'
 import UpdateVenteModal from './modals/UpdateVenteModal'
+import UpdateVentePaymentModal from './modals/UpdateVentePaymentModal'
 import './datatable.css'
 import { createVente, getVentes, updateVente } from '../services/venteservice'
 import { useNavigate } from 'react-router-dom'
@@ -82,6 +84,13 @@ function Ventes({auth}) {
       CreateVenteModal().then(create);
   }
 
+  const handlePayment = (d) => {
+    UpdateVentePaymentModal({vente: d}).then((d => {
+      const {_id,...rest} = d;
+      update({_id,data: rest});
+  }));
+  }
+
   const renderHeader = () => {
       return (
           <div className="flex justify-between items-center">
@@ -109,7 +118,8 @@ const dateBodyTemplate = (rowData) => {
   const actionBodyTemplate = (rowData) => {
       return <div className="flex items-center justify-center space-x-1">
     <button type="button" onClick={() => handleViewVente(rowData)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-700 to-blue-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><BsEye className="text-white inline"/></button>
-      <button type="button" onClick={() => handleUpdateVente(rowData)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-700 to-blue-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><BsFillPenFill className="text-white inline"/></button>
+      <button type="button" onClick={() => handleUpdateVente(rowData)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-amber-700 to-amber-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><BsFillPenFill className="text-white inline"/></button>
+      <button type="button" onClick={() => handlePayment(rowData)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><GiMoneyStack className="text-white inline"/></button>
       </div>;
       
   }

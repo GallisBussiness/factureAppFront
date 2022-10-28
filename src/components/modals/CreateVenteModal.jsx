@@ -10,6 +10,7 @@ import { getClients } from '../../services/clientservice';
 import AddVentes from '../AddVentes';
 import Select from 'react-select'
 import { formatISO } from 'date-fns';
+import { InputNumber } from 'primereact/inputnumber';
 
 const schema = yup.object({
     date: yup.string()
@@ -18,6 +19,7 @@ const schema = yup.object({
     .required(),
     ventes: yup.array()
     .required(),
+    avance: yup.number()
   }).required();
 
 
@@ -32,7 +34,7 @@ function CreateventeModal({ isOpen, onResolve, onReject }) {
         } 
     });
 
-    const defaultValues = {date: formatISO(new Date(),{ representation: 'date' }), client: '', ventes: []};
+    const defaultValues = {date: formatISO(new Date(),{ representation: 'date' }), client: '', ventes: [],avance: 0};
     const {control, handleSubmit, setValue, getValues, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
       defaultValues
@@ -43,10 +45,12 @@ function CreateventeModal({ isOpen, onResolve, onReject }) {
   };
 
   const onCreate = data => {
-       const {client,ventes} = data;
+       const {client,ventes,avance} = data;
+       const avi = +avance;
        const total = ventes.reduce((acc,cur) => acc + (+cur.qte * (+cur.produit.value.pv)),0);
        const venteDto = ventes.map(v => ({qte: v.qte, produit: v.produit.value._id}));
-      onResolve({...data,client: client.value._id,total, ventes: venteDto});
+       const fd = {...data,client: client.value._id,total, ventes: venteDto,avance: avi, restant: total - avi}
+      onResolve(fd);
     };
 
   return (
@@ -70,6 +74,13 @@ function CreateventeModal({ isOpen, onResolve, onReject }) {
                   />
             )} />
               {getFormErrorMessage('client')} 
+            </div>
+            <div className="flex flex-col space-y-1 w-full">
+            <label htmlFor="avance" className="form-label">Payement Client</label>
+              <Controller control={control} name="avance" render={({field}) => (
+                  <InputNumber inputId="avance" value={field.value} onValueChange={(e) => field.onChange(e.value)} className="py-1 h-12"  />
+              )} />
+              {getFormErrorMessage('avance')} 
             </div>
             <button  type="submit" className="inline-block px-6 py-3 font-bold text-center
              text-white uppercase align-middle transition-all rounded-lg cursor-pointer

@@ -8,16 +8,18 @@ import { AiOutlinePlus } from 'react-icons/ai'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import ModalContainer from 'react-modal-promise'
 import { InputText } from 'primereact/inputtext'
-import { BsFillPenFill } from 'react-icons/bs'
+import { BsEye, BsFillPenFill } from 'react-icons/bs'
 import createClientModal from './modals/createClientModal'
 import updateClientModal from './modals/updateClientModal'
 import './datatable.css'
 import { createClient, getClients, updateClient } from '../services/clientservice'
+import { useNavigate } from 'react-router-dom'
 
 
 function Clients() {
     const [selectedClients, setSelectedClients] = useState(null);
     const qc = useQueryClient()
+    const navigate = useNavigate()
     const toast = useRef();
     const [filters, setFilters] = useState({
         'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -79,6 +81,7 @@ function Clients() {
         createClientModal().then(create);
     }
 
+    const handleViewClient = (row) => navigate(`/dashboard/clients/${row._id}`);
     const renderHeader = () => {
         return (
             <div className="flex justify-between items-center">
@@ -93,6 +96,7 @@ function Clients() {
 
     const actionBodyTemplate = (rowData) => {
         return <div className="flex items-center justify-center space-x-1">
+        <button type="button" onClick={() => handleViewClient(rowData)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><BsEye className="text-white inline"/></button>
         <button type="button" onClick={() => handleUpdateClient(rowData)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-700 to-blue-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><BsFillPenFill className="text-white inline"/></button>
         </div>;
         

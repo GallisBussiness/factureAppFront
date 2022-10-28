@@ -8,7 +8,7 @@ import ReactToPrint from 'react-to-print';
 
 function Vente() {
     const {id} = useParams()
-    const qk = ['get_Vente']
+    const qk = ['get_Vente',id]
     const componentRef = useRef();
 
     const {data: vente } = useQuery(qk, () => getVente(id));

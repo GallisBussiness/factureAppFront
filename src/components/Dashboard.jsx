@@ -3,6 +3,7 @@ import { useQuery} from "react-query"
 import { Route, Routes } from "react-router-dom"
 import { getAuth } from "../services/authservice"
 import { Navbar } from "./atomes/Navbar"
+import Client from "./Client"
 import Clients from "./Clients"
 import GlobalLoadingIndicator from "./GlobalIsFetchingInd"
 import Produits from "./Produits"
@@ -36,6 +37,7 @@ const Dashboard = () => {
      <Route path="unites" element={<Unites auth={data}/>} />
      <Route path="ventes/:id" element={<Vente/>} />
      <Route path="clients" element={<Clients auth={data}/>} />
+     <Route path="clients/:id" element={<Client auth={data}/>} />
      <Route path="produits" element={<Produits auth={data}/>} />
      </Routes>
     </div>

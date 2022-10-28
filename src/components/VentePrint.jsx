@@ -96,6 +96,20 @@ const formatDate = (v) => {
                     {vente?.total}
                   </th>
                 </tr>
+                <tr>
+                  <th scope="row" colSpan={2} className="text-sm font-bold text-right  sm:table-cell border border-slate-600 underline px-2">
+                    AVANCE
+                  </th>
+                  <th scope="row"  className="text-sm font-bold text-center border border-slate-600 italic">
+                    {vente?.avance}
+                  </th>
+                  <th scope="row" className="text-sm font-bold text-right  sm:table-cell border border-slate-600 underline px-2">
+                    RESTANT
+                  </th>
+                  <th scope="row" className="text-sm font-bold text-center border border-slate-600 italic">
+                    {vente?.restant}
+                  </th>
+                </tr>
               </tfoot>
             </table>
           </div>
