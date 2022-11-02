@@ -64,7 +64,7 @@ const formatDate = (v) => {
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="">
                 {vente?.ventes?.map((v,i)=> (
                   <tr key={i} className="border-b border-slate-200">
                     <td className="text-xs text-center font-bold sm:table-cell border-l border-r border-slate-600 uppercase underline">
@@ -82,9 +82,15 @@ const formatDate = (v) => {
                   <td className="font-bold text-xs text-center border-l border-r border-slate-600">
                     {v.produit.pv * v.qte}
                   </td>
-                </tr> 
+                </tr>
                 ))}
-               
+               <tr className="h-96">
+                <td className="sm:table-cell border-l border-r border-slate-600"></td>
+                <td className="sm:table-cell border-l border-r border-slate-600"></td>
+                <td className="sm:table-cell border-l border-r border-slate-600"></td>
+                <td className="sm:table-cell border-l border-r border-slate-600"></td>
+                <td className="sm:table-cell border-l border-r border-slate-600"></td>
+               </tr>
               </tbody>
               <tfoot>
               

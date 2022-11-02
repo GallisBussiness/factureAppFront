@@ -15,6 +15,7 @@ function Client() {
 
     const {data: client } = useQuery(qk, () => getClient(id));
     const {data: factures } = useQuery(qkf, () => getVentesByClient(id));
+    console.log(factures)
 
    
     
