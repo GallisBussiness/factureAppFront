@@ -1,7 +1,6 @@
 import { forwardRef } from "react";
 
 export const RaportPrint = forwardRef(({Ventes},ref) => {
-
   const calculTotal = (arr) => arr.reduce((acc,cur) => acc + cur.total,0);
   const calculBenefice = (arr) =>  {
     const tv = arr?.reduce((acc,cur) => acc + cur.ventes.reduce((ac,cu) => ac + ((cu.produit.pv * cu.qte) - (cu.produit.pa * cu.qte)),0),0);

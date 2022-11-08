@@ -18,6 +18,7 @@ const schema = yup.object({
 
 function AddVentes({ventes,setVente}) {
   const [produits,setProduits] = useState([])
+  const [total,setTotal] = useState(0)
  const [curVentes,setCurVentes] = useState(ventes);
     const defaultValues = {
         qte: 1,
@@ -47,16 +48,19 @@ const actionBodyTemplate = (rowData) => {
   
 }
 
+const getTotal = (ventes) => ventes.reduce((acc,cur) => acc + (+cur.qte * (+cur.produit.value.pv)),0);
 
   const deleteVente = (row) => {
-    const rest = curVentes.filter(v => v.produit.value.nom !== row.produit.value.nom )
+    const rest = curVentes.filter(v => v.produit.value.nom !== row.produit.value.nom );
     setCurVentes(rest);
+    setTotal(getTotal(rest))
     setFocus('produit');
   }
 
   const addProduct = data => {
     setCurVentes(cur => ([...cur,data]))
     setVente('ventes', [...curVentes,data]);
+    setTotal(getTotal([...curVentes,data]))
     setFocus('produit');
   };
 
@@ -91,7 +95,9 @@ const actionBodyTemplate = (rowData) => {
             </div>
             
           </form>
-
+    <div className="my-5 flex items-center justify-end bg-slate-100 px-10 py-2">
+       <h1 className="text-2xl font-semibold"> Total : {total}</h1>
+    </div>
           <div className="my-2">
             
           <DataTable value={curVentes} rows={10}
