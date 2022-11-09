@@ -14,10 +14,12 @@ import CreateVenteModal from './modals/CreateVenteModal'
 import UpdateVenteModal from './modals/UpdateVenteModal'
 import UpdateVentePaymentModal from './modals/UpdateVentePaymentModal'
 import './datatable.css'
-import { createVente, getVentes, updateVente } from '../services/venteservice'
+import { createVente, getVentes, removeVente, updateVente } from '../services/venteservice'
 import { useNavigate } from 'react-router-dom'
+import ConfirmDelete from './modals/ConfirmDelete'
+import { MdDelete } from 'react-icons/md'
 
-function Ventes({auth}) {
+function Ventes() {
 
   const [selectedVentes, setSelectedVentes] = useState(null);
   const qc = useQueryClient()
@@ -37,7 +39,7 @@ function Ventes({auth}) {
       setGlobalFilterValue(value);
   }
 
-  const qk = ['get_Ventes',auth?._id]
+  const qk = ['get_Ventes']
 
   const {data: Ventes, isLoading } = useQuery(qk, () => getVentes());
 
@@ -63,10 +65,21 @@ function Ventes({auth}) {
          }
   })
 
+  const {mutate: deleteV} = useMutation((id) => removeVente(id), {
+    onSuccess: (_) => {
+    toast.current.show({severity: 'success', summary: 'Suppréssion Facture', detail: 'Suppréssion réussie !!'});
+     qc.invalidateQueries(qk);
+    },
+    onError: (_) => {
+        toast.current.show({severity: 'error', summary: 'Suppréssion Facture', detail: 'Suppréssion échouée !!'});
+    }
+})
+
   const leftToolbarTemplate = () => {
       return (
           <div className="flex items-center justify-center space-x-2">
               <button className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-700 to-blue-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" onClick={() => handleCreateVente()} >Nouveau <AiOutlinePlus className="h-6 w-6 text-white inline"/></button>
+              <button className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-red-700 to-red-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" onClick={() => handleDelete()} disabled={!selectedVentes || !selectedVentes.length}>Supprimer <MdDelete className="h-6 w-6 text-white inline"/></button>
           </div>
       )
   }
@@ -82,6 +95,15 @@ function Ventes({auth}) {
   const handleViewVente = (row) => navigate(`/dashboard/ventes/${row._id}`);
   const handleCreateVente = () => {
       CreateVenteModal().then(create);
+  }
+
+  const handleDelete = async () => {
+    const resconfirm = await ConfirmDelete();
+    if(resconfirm) {
+        for(let i = 0; i < selectedVentes?.length; i++) {
+         deleteV(selectedVentes[i]?._id);
+      }
+    }
   }
 
   const handlePayment = (d) => {
