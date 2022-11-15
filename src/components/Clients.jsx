@@ -85,7 +85,7 @@ function Clients() {
     const renderHeader = () => {
         return (
             <div className="flex justify-between items-center">
-                <h5 className="m-0">Liste des Utilisateurs</h5>
+                <h5 className="m-0">Liste des Clients</h5>
                 <span className="p-input-icon-left">
                     <i className="pi pi-search" />
                     <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Rechercher ..." />

@@ -33,7 +33,13 @@ function UpdateVenteModal({ isOpen, onResolve, onReject,vente }) {
         } 
     });
 
-    const defaultValues = {date: vente?.date, client: '', ventes: [],avance: vente?.avance};
+    const correctionVentes = (ventes) => {
+      return ventes.map(v => ({qte: v.qte, produit: {label: `${v.produit.unite.nom} - ${v.produit.nom} - ${v.produit.pv}`, value: v.produit}}))
+    }
+
+    const correctionClient = (client) => ({label: `${client.prenom} - ${client.nom} - ${client.tel}`, value: client});
+
+    const defaultValues = {date: vente?.date, client: correctionClient(vente?.client), ventes: correctionVentes(vente?.ventes),avance: vente?.avance};
     const {control, handleSubmit, setValue, getValues, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
       defaultValues

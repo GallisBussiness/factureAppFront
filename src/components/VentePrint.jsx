@@ -84,7 +84,7 @@ const formatDate = (v) => {
                   </td>
                 </tr>
                 ))}
-               <tr className="h-96">
+               <tr className="h-72">
                 <td className="sm:table-cell border-l border-r border-slate-600"></td>
                 <td className="sm:table-cell border-l border-r border-slate-600"></td>
                 <td className="sm:table-cell border-l border-r border-slate-600"></td>

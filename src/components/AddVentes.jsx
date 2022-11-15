@@ -18,7 +18,7 @@ const schema = yup.object({
 
 function AddVentes({ventes,setVente}) {
   const [produits,setProduits] = useState([])
-  const [total,setTotal] = useState(0)
+  const [total,setTotal] = useState(ventes.reduce((acc,cur) => acc + (+cur.qte * (+cur.produit.value.pv)),0))
  const [curVentes,setCurVentes] = useState(ventes);
     const defaultValues = {
         qte: 1,
