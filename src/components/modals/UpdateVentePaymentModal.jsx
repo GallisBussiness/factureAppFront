@@ -13,7 +13,7 @@ const schema = yup.object({
 
 function UpdateVentePaymentModal({ isOpen, onResolve, onReject,vente }) {
 
-    const defaultValues = {avance: vente?.avance};
+    const defaultValues = {avance: 0};
     const {control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
       defaultValues
@@ -25,8 +25,9 @@ function UpdateVentePaymentModal({ isOpen, onResolve, onReject,vente }) {
 
   const onCreate = data => {
     const {avance} = data;
-    const restant = vente?.total - avance;
-      onResolve({_id:vente?._id, avance: +avance, restant});
+    const tv = +avance + vente?.avance;
+    const restant = vente?.total - tv;
+    onResolve({_id:vente?._id, avance: tv, restant});
     };
 
   return (

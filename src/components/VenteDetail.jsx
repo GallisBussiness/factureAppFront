@@ -15,6 +15,8 @@ import { MdDelete } from 'react-icons/md'
 import { createVenteDetail, getVenteDetails, removeVenteDetail, updateVenteDetail } from '../services/vente-detail'
 import CreateVenteDetailModal from './modals/CreateVenteDetailModal'
 import UpdateVenteDetailModal from './modals/UpdateVenteDetailModal'
+import { GiMoneyStack } from 'react-icons/gi'
+import UpdateVenteDetailPaymentModal from './modals/UpdateVenteDetailPaymentModal'
 
 function VenteDetail() {
     
@@ -99,6 +101,13 @@ function VenteDetail() {
         }
       }
     }
+
+    const handlePayment = (d) => {
+      UpdateVenteDetailPaymentModal({vente: d}).then((d => {
+        const {_id,...rest} = d;
+        update({_id,data: rest});
+    }));
+    }
   
   
     const renderHeader = () => {
@@ -126,6 +135,7 @@ function VenteDetail() {
   
     const actionBodyTemplate = (rowData) => {
         return <div className="flex items-center justify-center space-x-1">
+                <button type="button" onClick={() => handlePayment(rowData)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><GiMoneyStack className="text-white inline"/></button>
         <button type="button" onClick={() => handleUpdateVente(rowData)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-amber-700 to-amber-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><BsFillPenFill className="text-white inline"/></button>
         </div>;
         

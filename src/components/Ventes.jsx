@@ -137,6 +137,20 @@ const dateBodyTemplate = (rowData) => {
 
   const clientTemplate = (row) => `${row.client.prenom} ${row.client.nom}`;
 
+  const payeTemplate = (row) => {
+    const classs = row.total > row.avance ? "bg-amber-500 text-white font-bold px-4 py-2 rounded-md text-center" : "bg-green-500 text-white font-bold px-4 py-2 rounded-md text-center";
+   return  <>
+    <div className={classs}>{row.avance}</div>
+    </>
+};
+
+const restantTemplate = (row) => {
+  const classs = row.restant > 0 ? "bg-amber-500 text-white font-bold px-4 py-2 rounded-md text-center" : "bg-green-500 text-white font-bold px-4 py-2 rounded-md text-center";
+ return  <>
+  <div className={classs}>{row.restant}</div>
+  </>
+};
+
   const actionBodyTemplate = (rowData) => {
       return <div className="flex items-center justify-center space-x-1">
     <button type="button" onClick={() => handleViewVente(rowData)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-700 to-blue-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><BsEye className="text-white inline"/></button>
@@ -180,6 +194,8 @@ const dateBodyTemplate = (rowData) => {
                     <Column field="date" header="Date" body={dateBodyTemplate} sortable style={{ minWidth: '14rem' }} />
                     <Column field="client.nom" header="Client" body={clientTemplate} sortable style={{ minWidth: '14rem' }} />
                     <Column field="total" header="Total" sortable  style={{ minWidth: '8rem' }}/>
+                    <Column field="avance" header="Payé" body={payeTemplate} sortable  style={{ minWidth: '8rem' }}/>
+                    <Column field="restant" header="Restant" body={restantTemplate} sortable  style={{ minWidth: '8rem' }}/>
                     <Column headerStyle={{ width: '4rem', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} body={actionBodyTemplate} />
                 </DataTable>
             </div>
