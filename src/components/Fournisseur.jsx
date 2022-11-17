@@ -138,14 +138,26 @@ const dateBodyTemplate = (rowData) => {
   const fournisseurTemplate = (row) => `${row.fournisseur.prenom} ${row.fournisseur.nom}`;
 
   const payeTemplate = (row) => {
-    const classs = row.total > row.avance ? "bg-amber-500 text-white font-bold px-4 py-2 rounded-md text-center" : "bg-green-500 text-white font-bold px-4 py-2 rounded-md text-center";
+    let classs = row.total > row.avance ? "bg-amber-500 text-white font-bold px-4 py-2 rounded-md text-center" : "bg-green-500 text-white font-bold px-4 py-2 rounded-md text-center";
+    if(row.avance < 0) {
+      classs = "bg-red-500 text-white font-bold px-4 py-2 rounded-md text-center";
+    }
    return  <>
     <div className={classs}>{row.avance}</div>
     </>
 };
 
+const totalTemplate = (row) => (
+  <>
+  <div className="bg-blue-500 text-white font-bold px-4 py-2 rounded-md text-center">{row.total}</div>
+  </>
+);
+
 const restantTemplate = (row) => {
-  const classs = row.restant > 0 ? "bg-amber-500 text-white font-bold px-4 py-2 rounded-md text-center" : "bg-green-500 text-white font-bold px-4 py-2 rounded-md text-center";
+  let classs = row.restant > 0 ? "bg-amber-500 text-white font-bold px-4 py-2 rounded-md text-center" : "bg-green-500 text-white font-bold px-4 py-2 rounded-md text-center";
+  if(row.restant < 0) {
+    classs = "bg-red-500 text-white font-bold px-4 py-2 rounded-md text-center";
+  }
  return  <>
   <div className={classs}>{row.restant}</div>
   </>
@@ -194,7 +206,7 @@ const restantTemplate = (row) => {
                     <Column selectionMode="multiple" headerStyle={{ width: '3em' }}></Column>
                     <Column field="date" header="Date" body={dateBodyTemplate} sortable style={{ minWidth: '14rem' }} />
                     <Column field="fournisseur.nom" header="Founisseur" body={fournisseurTemplate} sortable style={{ minWidth: '14rem' }} />
-                    <Column field="total" header="Total" sortable  style={{ minWidth: '8rem' }}/>
+                    <Column field="total" header="Total" body={totalTemplate} sortable  style={{ minWidth: '8rem' }}/>
                     <Column field="avance" header="Payé" body={payeTemplate} sortable  style={{ minWidth: '8rem' }}/>
                     <Column field="restant" header="Restant" body={restantTemplate} sortable  style={{ minWidth: '8rem' }}/>
                     <Column headerStyle={{ width: '4rem', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} body={actionBodyTemplate} />
