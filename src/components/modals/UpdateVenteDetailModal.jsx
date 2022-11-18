@@ -31,7 +31,7 @@ function UpdateVenteDetailModal({ isOpen, onResolve, onReject,vente }) {
   const onCreate = data => {
        const {montant} = data;
        const avi = +montant;
-       const fd = {...data,montant: avi}
+       const fd = {_id:vente?._id,...data,montant: avi}
       onResolve(fd);
     };
 

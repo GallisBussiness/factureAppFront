@@ -200,7 +200,7 @@ const restantTemplate = (row) => {
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" rowsPerPageOptions={[10,25,50]}
                     dataKey="_id" rowHover selection={selectedVentes} onSelectionChange={e => setSelectedVentes(e.value)}
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"
-                    globalFilterFields={['date', 'client.nom']} emptyMessage="Aucune Facture trouvée"
+                    globalFilterFields={['date', 'client.prenom','client.nom']} emptyMessage="Aucune Facture trouvée"
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} Factures" size="small">
                     <Column selectionMode="multiple" headerStyle={{ width: '3em' }}></Column>
                     <Column field="date" header="Date" body={dateBodyTemplate} sortable style={{ minWidth: '14rem' }} />
