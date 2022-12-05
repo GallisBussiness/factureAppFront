@@ -6,6 +6,7 @@ import { getVentesByClient } from "../services/venteservice";
 import { ClientPrint } from "./ClientPrint";
 import { AiFillPrinter } from "react-icons/ai"
 import ReactToPrint from 'react-to-print';
+import FactureVente from "./FactureVente";
 
 function Client() {
     const {id} = useParams()
@@ -43,7 +44,7 @@ function Client() {
 <div className="bg-white w-8/12 mx-auto my-10">
     {factures && client && <ClientPrint ref={componentRef} factures={factures} client={client} />}
 </div>
-   
+   <FactureVente idClient={id} />
     </>
   )
 }

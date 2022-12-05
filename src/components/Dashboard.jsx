@@ -36,7 +36,7 @@ const Dashboard = () => {
      <Route path="profil" element={<Profil auth={data}/>} />
      <Route path="users" element={<Users auth={data}/>} />
      <Route path="stats" element={<Stats auth={data}/>} />
-     <Route path="ventes" element={<Ventes auth={data}/>} />
+     <Route path="facturations" element={<Ventes auth={data}/>} />
      <Route path="details" element={<VenteDetail auth={data}/>} />
      <Route path="unites" element={<Unites auth={data}/>} />
      <Route path="ventes/:id" element={<Vente/>} />

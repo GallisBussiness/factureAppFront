@@ -54,7 +54,7 @@ function CreateClientModal({ isOpen, onResolve, onReject }) {
             <div className="mb-3 flex flex-col space-y-2">
             <label htmlFor="tel" className="form-label">Numéro de Téléphone </label>
             <Controller control={control} name="tel" render={({field}) => (
-            <InputMask id="tel" mask="(+221) 99-999-99-99" value={field.value} onChange={(e) => field.onChange(e.value)}></InputMask>
+            <InputMask id="tel" mask="(+221) 99-999-99-99" value={field.value} onChange={(e) => field.onChange(e.value)} ></InputMask>
              )}/>
               {getFormErrorMessage('tel')} 
             </div>
