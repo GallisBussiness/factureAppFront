@@ -19,15 +19,26 @@ import UpdateFactureAchatPaymentModal from './modals/UpdateFactureAchatPaymentMo
 import './datatable.css'
 import { createFactureAchat, removeFactureAchat, updateFactureAchat } from '../services/facture-achat-service'
 import ConfirmDelete from './modals/ConfirmDelete'
-import { MdDelete } from 'react-icons/md'
+import { MdDelete } from 'react-icons/md';
+
+const calculRestant = (tab) => {
+  let r = tab.reduce((acc,cur) => acc + cur.restant, 0);
+  return r;
+}
 
 function Fournisseur() {
 
   const {id} = useParams()
   const qk = ['get_Fournisseur',id]
   const qkf = ['get_facture_by_fournisseur', id];
+  const [restant,setRestant] = useState(0);
   const {data: fournisseur } = useQuery(qk, () => getFournisseur(id));
-  const {data: factures, isLoading } = useQuery(qkf, () => getFactureAchatByFournisseur(id));
+  const {data: factures, isLoading } = useQuery(qkf, () => getFactureAchatByFournisseur(id), {
+    onSuccess: (_) => {
+      let r = calculRestant(_);
+      setRestant(r);
+  }
+  });
   const [selectedFactureAchats, setSelectedFactureAchats] = useState(null);
   const qc = useQueryClient()
   const toast = useRef();
@@ -84,6 +95,14 @@ function Fournisseur() {
           </div>
       )
   }
+
+  const rightToolbarTemplate = () => {
+    return (
+        <>
+         <div className="text-lg font-bold text-black mx-10 p-2 border"> Restant Total : {restant}</div>
+        </>
+    )
+}
 
 
   const handleUpdateFactureAchat = (d) => {
@@ -196,7 +215,7 @@ const restantTemplate = (row) => {
 
 <div className="datatable-doc mt-4 w-4/5 mx-auto">
             <div className="card">
-            <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
+            <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
                 <DataTable value={factures} paginator className="p-datatable-customers" header={header} rows={10}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" rowsPerPageOptions={[10,25,50]}
                     dataKey="_id" rowHover selection={selectedFactureAchats} onSelectionChange={e => setSelectedFactureAchats(e.value)}

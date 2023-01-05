@@ -19,10 +19,21 @@ import ConfirmDelete from './modals/ConfirmDelete'
 import { MdDelete } from 'react-icons/md'
 
 
+const calculRestant = (tab) => {
+  let r = tab.reduce((acc,cur) => acc + cur.restant, 0);
+  return r;
+}
+
 function FactureVente({idClient}) {
     
     const qkf = ['get_dette_by_client', idClient];
-    const {data: factures, isLoading } = useQuery(qkf, () => getFactureVenteByClient(idClient));
+    const [restant,setRestant] = useState(0);
+    const {data: factures, isLoading } = useQuery(qkf, () => getFactureVenteByClient(idClient), {
+      onSuccess: (_) => {
+          let r = calculRestant(_);
+          setRestant(r);
+      }
+    });
     const [selectedFactureVentes, setSelectedFactureVentes] = useState(null);
     const qc = useQueryClient()
     const toast = useRef();
@@ -79,6 +90,14 @@ function FactureVente({idClient}) {
             </div>
         )
     }
+
+    const rightToolbarTemplate = () => {
+      return (
+          <>
+           <div className="text-lg font-bold text-black mx-10 p-2 border"> Restant Total : {restant}</div>
+          </>
+      )
+  }
   
   
     const handleUpdateFactureVente = (d) => {
@@ -172,7 +191,7 @@ function FactureVente({idClient}) {
     <>
     <div className="datatable-doc mt-4 w-4/5 mx-auto">
             <div className="card">
-            <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
+            <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
                 <DataTable value={factures} paginator className="p-datatable-customers" header={header} rows={10}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" rowsPerPageOptions={[10,25,50]}
                     dataKey="_id" rowHover selection={selectedFactureVentes} onSelectionChange={e => setSelectedFactureVentes(e.value)}
