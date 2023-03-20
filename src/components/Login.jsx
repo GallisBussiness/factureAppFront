@@ -8,6 +8,7 @@ import {Controller, useForm } from 'react-hook-form';
 import { Toast } from 'primereact/toast';
 import { login } from '../services/authservice';
 import { Button } from 'primereact/button';
+import { PasswordInput, TextInput } from '@mantine/core';
 
 const schema = yup.object({
   username: yup.string()
@@ -37,10 +38,6 @@ const Login = () => {
     resolver: yupResolver(schema),
     defaultValues
   });
-  const getFormErrorMessage = (name) => {
-    return errors[name] && <small className="p-error">{errors[name].message}</small>
-};
-
 
   const {mutate,isLoading} = useMutation((data) => login(data), {
     onSuccess(data) { 
@@ -83,29 +80,32 @@ const Login = () => {
               </div>
               <div className="flex-auto p-6">
                 <form onSubmit={handleSubmit(onConnect)} method="POST">
-
-                  <label className="mb-2 ml-1 font-bold text-xs text-slate-700">Telephone</label>
                   <Controller control={control} name="username" render={({field}) => (
                     <>
-                    <div className="mb-4">
-                    <input type="tel" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-blue-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 transition-all focus:border-blue-300 focus:outline-none focus:transition-shadow" placeholder="Telephone" aria-label="Tel" aria-describedby="email-addon" autoFocus/>
-                  </div>
+                    <TextInput
+                            value={field.value}
+                            onChange={(event) => field.onChange(event.currentTarget.value)}
+                            placeholder="Username"
+                            label="Téléphone"
+                            error={errors.username && errors.username.message}
+                            withAsterisk
+                       />
                     </>
                      )}/>
-                  {getFormErrorMessage('username')} 
                  
-                  <label className="mb-2 ml-1 font-bold text-xs text-slate-700">Password</label>
                   <Controller control={control} name="password" render={({field}) => (
                     <>
-                    <div className="mb-4">
-                    <input type="password" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-blue-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 transition-all focus:border-blue-300 focus:outline-none focus:transition-shadow" placeholder="Password" aria-label="Password" aria-describedby="password-addon" />
-                  </div>
+                            <PasswordInput
+                            value={field.value}
+                            onChange={(event) => field.onChange(event.currentTarget.value)}
+                            placeholder="Mot de Passe"
+                            label="Mot de Passe"
+                            error={errors.password && errors.password.message}
+                            withAsterisk
+                       />
                     </>
                    )}/>
-                    {getFormErrorMessage('password')} 
-                  
-    
-                  <div className="text-center">
+                  <div className="text-center my-5">
                     <Button type="submit" label="Se Connecter" loading={isLoading} color="blue" className="inline-block w-full px-6 py-3 mt-6 mb-0 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer shadow-soft-md bg-x-25 bg-150 leading-pro text-xs ease-soft-in tracking-tight-soft bg-gradient-to-tl from-blue-700 to-blue-300 hover:scale-102 hover:shadow-soft-xs active:opacity-85" />
                   </div>
                 </form>

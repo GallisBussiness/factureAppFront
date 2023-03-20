@@ -11,6 +11,7 @@ import GlobalLoadingIndicator from "./GlobalIsFetchingInd"
 import Produits from "./Produits"
 import { Profil } from "./Profil"
 import Stats from "./Stats"
+import Stocks from "./Stocks"
 import Unites from "./Unites"
 import Users from "./Users"
 import Vente from "./Vente"
@@ -37,6 +38,7 @@ const Dashboard = () => {
      <Route path="users" element={<Users auth={data}/>} />
      <Route path="stats" element={<Stats auth={data}/>} />
      <Route path="facturations" element={<Ventes auth={data}/>} />
+     <Route path="stocks" element={<Stocks auth={data}/>} />
      <Route path="details" element={<VenteDetail auth={data}/>} />
      <Route path="unites" element={<Unites auth={data}/>} />
      <Route path="ventes/:id" element={<Vente/>} />

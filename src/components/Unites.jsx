@@ -16,7 +16,7 @@ import { createUnite, getUnites, updateUnite } from '../services/uniteservice'
 
 
 
-function Unites({auth}) {
+function Unites() {
     const [selectedUnites, setSelectedUnites] = useState(null);
     const qc = useQueryClient()
     const toast = useRef();

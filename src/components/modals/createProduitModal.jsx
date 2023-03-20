@@ -30,7 +30,7 @@ function CreateProduitModal({ isOpen, onResolve, onReject }) {
       } 
   });
 
-    const defaultValues = {nom: '', unite: {}, pa: 0, pv: 0};
+    const defaultValues = {nom: '', unite: '', pa: 0, pv: 0};
     const {control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
       defaultValues

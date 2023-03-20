@@ -1,4 +1,5 @@
 
+import { Table } from "@mantine/core";
 import { forwardRef } from "react";
 
 
@@ -8,11 +9,12 @@ const formatDate = (v) => {
   return parts.reverse().join('-')
 }
  return (
- <div ref={ref} className="w-10/12 mx-auto font-print">
+ <div ref={ref} className="w-10/12 mx-auto font-print h-screen">
          <section className="py-1 bg-white">
   <div className="max-w-5xl mx-auto bg-white">
     <article className="overflow-hidden">
       <div className="bg-[white] rounded-b-md">
+        
         <div className="p-1">
           <div className="flex items-center space-x-10">
            <div className="flex flex-col items-center justify-center space-y-1 border border-black w-2/6 print:w-3/6 rounded-md p-2">
@@ -41,85 +43,53 @@ const formatDate = (v) => {
         </div>
           </div>
         </div>
-       
-        <div className="p-1">
-          <div className="flex flex-col mx-0">
-            <table className="border border-separate border-spacing-0">
-              <thead>
-                <tr> 
-                <th scope="col" className="py-1 text-center text-xs font-bold sm:table-cell border border-slate-600">
-                    Qté
-                  </th>
-                  <th scope="col" className="py-1 text-center text-xs font-bold  border border-slate-600">
-                    Unite
-                  </th>
-                  <th scope="col" className="py-1  text-center text-xs font-bold border border-slate-600">
-                    Désignation
-                  </th>
-                  <th scope="col" className="py-1 text-center text-xs font-bold  border border-slate-600">
-                    PU
-                  </th>
-                  <th scope="col" className="py-1 text-center text-xs font-bold  border border-slate-600">
-                    Montant
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="">
-                {vente?.ventes?.map((v,i)=> (
-                  <tr key={i} className="border-b border-slate-200">
-                    <td className="text-xs text-center font-bold sm:table-cell border-l border-r border-slate-600 uppercase underline">
-                    {v.qte}
-                  </td>
-                  <td className="text-xs text-center font-bold sm:table-cell border-l border-r border-slate-600 uppercase underline">
-                    {v.produit.unite.nom}
-                  </td>
-                  <td className="text-xs text-center border-l border-slate-600 uppercase w-96">
-                    <div className="font-bold">{v.produit.nom}</div>
-                  </td>
-                  <td className="text-xs text-center border-l border-r border-slate-600">
-                    <div className="font-bold">{v.produit.pv}</div>
-                  </td>
-                  <td className="font-bold text-xs text-center border-l border-r border-slate-600">
-                    {v.produit.pv * v.qte}
-                  </td>
-                </tr>
+        <div className="w-full min-h-75-screen flex flex-col justify-between">
+          <div className="my-5 mx-10 flex flex-col items-center justify-center">
+       <Table withColumnBorders verticalSpacing="xs" fontSize="xs">
+      <thead>
+        <tr>
+          <th>QTE</th>
+          <th>Unite</th>
+          <th>DESIGNATION</th>
+          <th>PU</th>
+          <th>MONTANT</th>
+        </tr>
+      </thead>
+      <tbody>
+            {vente?.ventes?.map((v,i)=> (
+                   <tr key={i}>
+                   <td>{v.qte}</td>
+                   <td>{v.produit.unite.nom}</td>
+                   <td>{v.produit.nom}</td>
+                   <td>{v.produit.pv}</td>
+                   <td>{v.produit.pv * v.qte}</td>
+                 </tr>
                 ))}
-               <tr className="h-16">
-                <td className="sm:table-cell border-l border-r border-slate-600"></td>
-                <td className="sm:table-cell border-l border-r border-slate-600"></td>
-                <td className="sm:table-cell border-l border-r border-slate-600"></td>
-                <td className="sm:table-cell border-l border-r border-slate-600"></td>
-                <td className="sm:table-cell border-l border-r border-slate-600"></td>
-               </tr>
-              </tbody>
-              <tfoot>
-              
-                <tr>
-                  <th scope="row" colSpan={3} className="text-sm font-bold text-right  sm:table-cell border border-slate-600 underline px-2">
-                    NET A PAYER
-                  </th>
-                  <th scope="row" colSpan={2} className="text-sm font-bold text-center border border-slate-600 italic">
-                    {vente?.total}
-                  </th>
-                </tr>
-                <tr>
-                  <th scope="row" colSpan={2} className="text-sm font-bold text-right  sm:table-cell border border-slate-600 underline px-2">
-                    AVANCE
-                  </th>
-                  <th scope="row"  className="text-sm font-bold text-center border border-slate-600 italic">
-                    {vente?.avance}
-                  </th>
-                  <th scope="row" className="text-sm font-bold text-right  sm:table-cell border border-slate-600 underline px-2">
-                    RESTANT
-                  </th>
-                  <th scope="row" className="text-sm font-bold text-center border border-slate-600 italic">
-                    {vente?.restant}
-                  </th>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
+      </tbody>
+    </Table>
+       </div>
+       <div className="flex-auto"></div>
+       <div className="my-5 mx-10">
+        <Table withColumnBorders>
+        <thead>
+        <tr>
+          <th>AVANCE</th>
+          <th>RESTANT</th>
+          <th>NET A PAYER</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+           <td>{vente?.avance}</td>
+            <td>{vente?.restant}</td>
+            <td>{vente?.total}</td>
+        </tr>
+                  
+      </tbody>
+        </Table>
+       </div>
         </div>
+       
       </div>
     </article>
   </div>
