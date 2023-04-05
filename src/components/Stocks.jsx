@@ -11,12 +11,7 @@ import { InputText } from "primereact/inputtext";
 import CreateEntreeStockModal from "./modals/CreateEntreeStockModal";
 import CreateSortieStockModal from "./modals/createSortieStockModal";
 import "./datatable.css";
-import {
-  EntreeStock,
-  SortieStock,
-  getStocks,
-  updateStock,
-} from "../services/stockservice";
+import { EntreeStock, SortieStock, getStocks } from "../services/stockservice";
 import { format, parseISO } from "date-fns";
 import { LoadingOverlay } from "@mantine/core";
 
@@ -84,27 +79,6 @@ function Stocks() {
     }
   );
 
-  const { mutate: update, isLoading: isLoadingU } = useMutation(
-    (data) => updateStock(data._id, data.data),
-    {
-      onSuccess: (_) => {
-        toast.current.show({
-          severity: "success",
-          summary: "Mise à jour Stock",
-          detail: "Mis à jour réussie !!",
-        });
-        qc.invalidateQueries(qk);
-      },
-      onError: (_) => {
-        toast.current.show({
-          severity: "error",
-          summary: "Mis à jour Stock",
-          detail: "Mis à jour échouée !!",
-        });
-      },
-    }
-  );
-
   const leftToolbarTemplate = () => {
     return (
       <div className="flex items-center justify-center space-x-2">
@@ -154,7 +128,7 @@ function Stocks() {
   return (
     <>
       <LoadingOverlay
-        visible={isLoading || isLoadingE || isLoadingS || isLoadingU}
+        visible={isLoading || isLoadingE || isLoadingS}
         overlayBlur={2}
       />
       <div className="flex flex-wrap mt-6 -mx-3">
