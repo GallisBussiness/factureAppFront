@@ -63,7 +63,7 @@ export const VentePrint = forwardRef(({ vente }, ref) => {
                 </div>
               </div>
 
-              <table className="min-w-full border border-separate border-spacing-0">
+              <table className="min-w-full border border-separate border-spacing-0 h-max">
                 <thead>
                   <tr>
                     <th
@@ -98,7 +98,7 @@ export const VentePrint = forwardRef(({ vente }, ref) => {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="h-75-screen">
+                <tbody className="min-h-max">
                   {vente?.ventes.map((v, i) => (
                     <tr key={i} className="border-b border-slate-200">
                       <td className="text-sm text-center sm:table-cell border-l border-r border-slate-600 uppercase underline">

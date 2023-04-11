@@ -14,13 +14,18 @@ import "./datatable.css";
 import { EntreeStock, SortieStock, getStocks } from "../services/stockservice";
 import { format, parseISO } from "date-fns";
 import { LoadingOverlay } from "@mantine/core";
+import { Dropdown } from "primereact/dropdown";
+import { getUnites } from "../services/uniteservice";
 
 function Stocks() {
   const [selectedStocks, setSelectedStocks] = useState(null);
+  const [unites, setUnites] = useState([]);
   const qc = useQueryClient();
   const toast = useRef();
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    "produit.unite.nom": { value: null, matchMode: FilterMatchMode.EQUALS },
+    depot: { value: null, matchMode: FilterMatchMode.EQUALS },
   });
   const [globalFilterValue, setGlobalFilterValue] = useState("");
 
@@ -34,6 +39,14 @@ function Stocks() {
   };
 
   const qk = ["get_Stocks"];
+  const qku = ["get_Unites"];
+
+  useQuery(qku, () => getUnites(), {
+    onSuccess: (_) => {
+      const units = _.map((u) => u.nom);
+      setUnites(units);
+    },
+  });
 
   const { data: Stocks, isLoading } = useQuery(qk, () => getStocks());
 
@@ -88,6 +101,13 @@ function Stocks() {
         >
           ENTREE <AiOutlinePlus className="h-6 w-6 text-white inline" />
         </button>
+      </div>
+    );
+  };
+
+  const rightToolbarTemplate = () => {
+    return (
+      <div className="flex items-center justify-center space-x-2">
         <button
           className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-amber-700 to-amber-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs"
           onClick={() => handleSortieStock()}
@@ -106,7 +126,7 @@ function Stocks() {
     CreateEntreeStockModal().then(Entree);
   };
 
-  const dateTemplate = (row) => format(parseISO(row.createdAt), "dd/MM/yyyy");
+  const dateTemplate = (row) => format(parseISO(row?.createdAt), "dd/MM/yyyy");
 
   const renderHeader = () => {
     return (
@@ -121,6 +141,16 @@ function Stocks() {
           />
         </span>
       </div>
+    );
+  };
+
+  const uniteFilterTemplate = (options) => {
+    return (
+      <Dropdown
+        value={options.value}
+        options={unites}
+        onChange={(e) => options.filterApplyCallback(e.value)}
+      />
     );
   };
 
@@ -153,7 +183,11 @@ function Stocks() {
       </div>
       <div className="datatable-doc mt-4 w-4/5 mx-auto">
         <div className="card">
-          <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
+          <Toolbar
+            className="mb-4"
+            left={leftToolbarTemplate}
+            right={rightToolbarTemplate}
+          ></Toolbar>
           <DataTable
             value={Stocks}
             paginator
@@ -167,7 +201,7 @@ function Stocks() {
             selection={selectedStocks}
             onSelectionChange={(e) => setSelectedStocks(e.value)}
             filters={filters}
-            filterDisplay="menu"
+            filterDisplay="row"
             loading={isLoading}
             responsiveLayout="scroll"
             globalFilterFields={["produit.nom", "produit.unite.nom"]}
@@ -197,6 +231,8 @@ function Stocks() {
             <Column
               field="produit.unite.nom"
               header="Unite"
+              filter
+              filterElement={uniteFilterTemplate}
               sortable
               style={{ minWidth: "8rem" }}
             />
