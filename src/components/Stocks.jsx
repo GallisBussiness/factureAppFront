@@ -16,16 +16,20 @@ import { format, parseISO } from "date-fns";
 import { LoadingOverlay } from "@mantine/core";
 import { Dropdown } from "primereact/dropdown";
 import { getUnites } from "../services/uniteservice";
+import { getDepots } from "../services/depotservice";
 
 function Stocks() {
   const [selectedStocks, setSelectedStocks] = useState(null);
   const [unites, setUnites] = useState([]);
+  const [depots, setDepots] = useState([]);
+  const [tQte, setTQte] = useState(0);
   const qc = useQueryClient();
   const toast = useRef();
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     "produit.unite.nom": { value: null, matchMode: FilterMatchMode.EQUALS },
-    depot: { value: null, matchMode: FilterMatchMode.EQUALS },
+    "depot.nom": { value: null, matchMode: FilterMatchMode.EQUALS },
+    type: { value: null, matchMode: FilterMatchMode.EQUALS },
   });
   const [globalFilterValue, setGlobalFilterValue] = useState("");
 
@@ -48,8 +52,18 @@ function Stocks() {
     },
   });
 
-  const { data: Stocks, isLoading } = useQuery(qk, () => getStocks());
+  const qkd = ["get_Depots"];
 
+  useQuery(qkd, () => getDepots(), {
+    onSuccess: (_) => {
+      const units = _.map((u) => u.nom);
+      setDepots(units);
+    },
+  });
+
+  const { data: Stocks, isLoading } = useQuery(qk, () => getStocks(), {
+    onSuccess: (_) => calculQte(_),
+  });
   const { mutate: Entree, isLoading: isLoadingE } = useMutation(
     (data) => EntreeStock(data),
     {
@@ -114,6 +128,12 @@ function Stocks() {
         >
           SORTIE <AiOutlinePlus className="h-6 w-6 text-white inline" />
         </button>
+        <div>
+          <div className="text-lg font-bold text-black mx-10 p-2 border">
+            {" "}
+            Total QTE: {tQte}
+          </div>
+        </div>
       </div>
     );
   };
@@ -144,11 +164,36 @@ function Stocks() {
     );
   };
 
+  const calculQte = (values) => {
+    const qts = values.reduce((acc, v) => acc + v?.qte, 0);
+    setTQte(qts);
+  };
+
   const uniteFilterTemplate = (options) => {
     return (
       <Dropdown
         value={options.value}
         options={unites}
+        onChange={(e) => options.filterApplyCallback(e.value)}
+      />
+    );
+  };
+
+  const depotFilterTemplate = (options) => {
+    return (
+      <Dropdown
+        value={options.value}
+        options={depots}
+        onChange={(e) => options.filterApplyCallback(e.value)}
+      />
+    );
+  };
+
+  const mouvementFilterTemplate = (options) => {
+    return (
+      <Dropdown
+        value={options.value}
+        options={["ENTREE", "SORTIE"]}
         onChange={(e) => options.filterApplyCallback(e.value)}
       />
     );
@@ -201,6 +246,7 @@ function Stocks() {
             selection={selectedStocks}
             onSelectionChange={(e) => setSelectedStocks(e.value)}
             filters={filters}
+            onValueChange={calculQte}
             filterDisplay="row"
             loading={isLoading}
             responsiveLayout="scroll"
@@ -210,11 +256,22 @@ function Stocks() {
             size="small"
           >
             <Column
-              field="type"
-              header="Mouvement"
+              field="depot.nom"
+              header="Depot"
+              filter
+              filterElement={depotFilterTemplate}
               sortable
               style={{ minWidth: "8rem" }}
             />
+            <Column
+              field="type"
+              header="Mouvement"
+              filter
+              filterElement={mouvementFilterTemplate}
+              sortable
+              style={{ minWidth: "8rem" }}
+            />
+
             <Column
               field="createdAt"
               header="Date"

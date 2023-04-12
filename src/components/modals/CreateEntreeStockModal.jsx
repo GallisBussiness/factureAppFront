@@ -6,26 +6,28 @@ import { create } from "react-modal-promise";
 import { InputNumber } from "primereact/inputnumber";
 import { Button } from "@mantine/core";
 import Select from "react-select";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { createProduit, getProduits } from "../../services/produitservice";
+import { useQuery } from "react-query";
+import { getProduits } from "../../services/produitservice";
 import { useRef, useState } from "react";
 import { Toast } from "primereact/toast";
-import createProduitModal from "./createProduitModal";
+import { getDepots } from "../../services/depotservice";
 
 const schema = yup
   .object({
     produit: yup.object().required(),
     qte: yup.number().required(),
+    depot: yup.object().required(),
   })
   .required();
 
 function CreateEntreeStockModal({ isOpen, onResolve, onReject }) {
   const [produits, setProduits] = useState([]);
-  const qc = useQueryClient();
+  const [depots, setDepots] = useState([]);
   const toast = useRef();
   const defaultValues = {
     qte: 1,
     produit: "",
+    depot: "",
   };
   const {
     control,
@@ -47,26 +49,18 @@ function CreateEntreeStockModal({ isOpen, onResolve, onReject }) {
     },
   });
 
-  const { mutate: create } = useMutation((data) => createProduit(data), {
+  const qkd = ["get_Depots"];
+
+  useQuery(qkd, () => getDepots(), {
     onSuccess: (_) => {
-      toast.current.show({
-        severity: "success",
-        summary: "Creation Produit",
-        detail: "Création réussie !!",
-      });
-      qc.invalidateQueries(qkp);
-    },
-    onError: (_) => {
-      toast.current.show({
-        severity: "error",
-        summary: "Create Produit",
-        detail: "Creation échouée !!",
-      });
+      const newv = _.map((c) => ({
+        value: c,
+        label: c?.nom,
+      }));
+      setDepots(newv);
     },
   });
-  const handleCreateProduct = () => {
-    createProduitModal().then(create);
-  };
+
   const getFormErrorMessage = (name) => {
     return (
       errors[name] && <small className="p-error">{errors[name].message}</small>
@@ -74,8 +68,8 @@ function CreateEntreeStockModal({ isOpen, onResolve, onReject }) {
   };
 
   const onCreate = (data) => {
-    const { produit } = data;
-    onResolve({ ...data, produit: produit.value._id });
+    const { produit, depot } = data;
+    onResolve({ ...data, produit: produit.value._id, depot: depot.value._id });
   };
 
   return (
@@ -95,16 +89,19 @@ function CreateEntreeStockModal({ isOpen, onResolve, onReject }) {
               control={control}
               name="produit"
               render={({ field }) => (
-                <Select
-                  {...field}
-                  options={produits}
-                  noOptionsMessage={({ inputValue }) => (
-                    <Button onClick={handleCreateProduct}>
-                      crerr {inputValue}
-                    </Button>
-                  )}
-                  autoFocus
-                />
+                <Select {...field} options={produits} autoFocus />
+              )}
+            />
+          </div>
+          <div className="flex flex-col space-y-2 w-full">
+            <label htmlFor="depot" className="form-label">
+              Depot
+            </label>
+            <Controller
+              control={control}
+              name="depot"
+              render={({ field }) => (
+                <Select {...field} options={depots} autoFocus />
               )}
             />
           </div>

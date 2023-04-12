@@ -11,21 +11,25 @@ import { createProduit, getProduits } from "../../services/produitservice";
 import { useRef, useState } from "react";
 import { Toast } from "primereact/toast";
 import createProduitModal from "./createProduitModal";
+import { getDepots } from "../../services/depotservice";
 
 const schema = yup
   .object({
     produit: yup.object().required(),
     qte: yup.number().required(),
+    depot: yup.object().required(),
   })
   .required();
 
 function CreateSortieStockModal({ isOpen, onResolve, onReject }) {
   const [produits, setProduits] = useState([]);
+  const [depots, setDepots] = useState([]);
   const qc = useQueryClient();
   const toast = useRef();
   const defaultValues = {
     qte: 1,
     produit: "",
+    depot: "",
   };
   const {
     control,
@@ -44,6 +48,18 @@ function CreateSortieStockModal({ isOpen, onResolve, onReject }) {
         label: `${c?.unite?.nom} - ${c?.nom} `,
       }));
       setProduits(newv);
+    },
+  });
+
+  const qkd = ["get_Depots"];
+
+  useQuery(qkd, () => getDepots(), {
+    onSuccess: (_) => {
+      const newv = _.map((c) => ({
+        value: c,
+        label: c?.nom,
+      }));
+      setDepots(newv);
     },
   });
 
@@ -74,8 +90,8 @@ function CreateSortieStockModal({ isOpen, onResolve, onReject }) {
   };
 
   const onCreate = (data) => {
-    const { produit } = data;
-    onResolve({ ...data, produit: produit.value._id });
+    const { produit, depot } = data;
+    onResolve({ ...data, produit: produit.value._id, depot: depot.value._id });
   };
 
   return (
@@ -105,6 +121,18 @@ function CreateSortieStockModal({ isOpen, onResolve, onReject }) {
                   )}
                   autoFocus
                 />
+              )}
+            />
+          </div>
+          <div className="flex flex-col space-y-2 w-full">
+            <label htmlFor="depot" className="form-label">
+              Depot
+            </label>
+            <Controller
+              control={control}
+              name="depot"
+              render={({ field }) => (
+                <Select {...field} options={depots} autoFocus />
               )}
             />
           </div>
