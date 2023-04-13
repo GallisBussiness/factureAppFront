@@ -165,7 +165,13 @@ function Stocks() {
   };
 
   const calculQte = (values) => {
-    const qts = values.reduce((acc, v) => acc + v?.qte, 0);
+    const entree = values
+      .filter((v) => v.type === "ENTREE")
+      .reduce((acc, v) => acc + v?.qte, 0);
+    const sortie = values
+      .filter((v) => v.type === "SORTIE")
+      .reduce((acc, v) => acc + v?.qte, 0);
+    const qts = entree - sortie;
     setTQte(qts);
   };
 
